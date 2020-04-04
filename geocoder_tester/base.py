@@ -62,9 +62,11 @@ class SearchException(Exception):
             lines.append('# Message: {}'.format(self.message))
         lines.append('# Results were:')
         keys = [
-            'name', 'osm_key', 'osm_value', 'osm_id', 'housenumber', 'street',
-            'postcode', 'city', 'country', 'lat', 'lon', 'distance'
+            'name', 'osm_key', 'osm_value', 'osm_id', 'lat', 'lon', 'distance'
         ]
+        for k in self.expected.keys():
+            if k not in keys:
+                keys.append(k)
         results = [self.flat_result(f) for f in self.results['features']]
         lines.extend(dicts_to_table(results, keys=keys))
         lines.append('')
@@ -135,7 +137,9 @@ class Search:
 
     @staticmethod
     def nominatim_params(query, limit, lang, center):
-        params = {"format" : "geocodejson", "q" : '',"limit" : limit}
+        params = {"format" : "geocodejson", "q" : '',"limit" : limit,
+                  "addressdetails" : "1"
+                 }
         if lang:
             params["accept-language"] = lang
         if center:
@@ -175,6 +179,7 @@ class Reverse:
                  'city' : '10', 'district' : '14', 'street' : '17',
                  'house' : '18'}
         params = {"format" : "geocodejson", "limit" : limit,
+                  "addressdetails" : "1",
                   "lat" : center[0], "lon" : center[1],
                   "zoom" : zoom[detail if detail is not None else 'house']}
         if lang:
