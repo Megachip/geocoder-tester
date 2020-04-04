@@ -38,6 +38,12 @@ def pytest_addoption(parser):
         help="The URL to use for running tests against."
     )
     parser.addoption(
+        '--api-type',
+        dest="api_type",
+        default=CONFIG['API_TYPE'],
+        help="The API to test against (available: default, nominatim)."
+    )
+    parser.addoption(
         '--max-run',
         dest="max_run",
         type=int,
@@ -72,6 +78,7 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     CONFIG['API_URL'] = config.getoption('--api-url')
+    CONFIG['API_TYPE'] = config.getoption('--api-type')
     CONFIG['MAX_RUN'] = config.getoption('--max-run')
     CONFIG['LOOSE_COMPARE'] = config.getoption('--loose-compare')
     CONFIG['GEOJSON'] = config.getoption('--geojson')

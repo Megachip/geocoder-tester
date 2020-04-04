@@ -5,6 +5,7 @@ import requests
 from geopy import Point
 from geopy.distance import distance
 from unidecode import unidecode
+from pytest import skip
 
 POTSDAM = [52.3879, 13.0582]
 BERLIN = [52.519854, 13.438596]
@@ -12,6 +13,7 @@ MUNICH = [43.731245, 7.419744]
 AUCKLAND = [-36.853467, 174.765551]
 CONFIG = {
     'API_URL': "http://localhost:5001/api/",
+    'API_TYPE': "default",
     'LOOSE_COMPARE': False,
     'MAX_RUN': 0,  # means no limit
     'GEOJSON': False,
@@ -112,12 +114,41 @@ class SearchException(Exception):
             out['distance'] = int(dist.meters)
         return out
 
+class Search:
 
-def search(**params):
-    r = http.get(CONFIG['API_URL'], params=params)
-    if not r.status_code == 200:
-        raise HttpSearchException(error="Non 200 response")
-    return r.json()
+    @staticmethod
+    def default_params(query, limit, lang, center):
+        params = {"q": query, "limit": limit}
+        if lang:
+            params['lang'] = lang
+        if center:
+            params['lat'] = center[0]
+            params['lon'] = center[1]
+        return params
+
+    @staticmethod
+    def default(**params):
+        r = http.get(CONFIG['API_URL'], params=params)
+        if not r.status_code == 200:
+            raise HttpSearchException(error="Non 200 response")
+        return r.json()
+
+    @staticmethod
+    def nominatim_params(query, limit, lang, center):
+        params = {"format" : "geocodejson", "q" : query,"limit" : limit}
+        if lang:
+            params["accept-language"] = lang
+        if center:
+            skip("API has no lat/lon search paramters")
+        return params
+
+    @staticmethod
+    def nominatim(**params):
+        r = http.get(CONFIG['API_URL'] + '/search', params=params,
+                     headers={'user-agent': 'geocode-tester/0.0.1'})
+        if not r.status_code == 200:
+            raise HttpSearchException(error="Non 200 response")
+        return r.json()
 
 
 def normalize(s):
@@ -133,13 +164,12 @@ def compare_values(get, expected):
 
 def assert_search(query, expected, limit=1,
                   comment=None, lang=None, center=None):
-    params = {"q": query, "limit": limit}
-    if lang:
-        params['lang'] = lang
-    if center:
-        params['lat'] = center[0]
-        params['lon'] = center[1]
-    results = search(**params)
+    param_func = getattr(Search, CONFIG['API_TYPE'] + '_params', None)
+    search_func = getattr(Search, CONFIG['API_TYPE'], None)
+    if param_func is None or search_func is None:
+        raise RuntimeError("Unknown API type {}".format(CONFIG['API_TYPE']))
+    params = param_func(query, limit, lang, center)
+    results = search_func(**params)
 
     def assert_expected(expected):
         found = False
