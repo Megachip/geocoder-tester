@@ -39,7 +39,7 @@ class SearchException(Exception):
     def __init__(self, params, expected, results, message=None):
         super().__init__()
         self.results = results
-        self.query = params.pop('q')
+        self.query = params.get('q', '{lat}/{lon}'.format(**params))
         self.params = params
         self.expected = expected
         self.message = message
@@ -135,16 +135,55 @@ class Search:
 
     @staticmethod
     def nominatim_params(query, limit, lang, center):
-        params = {"format" : "geocodejson", "q" : query,"limit" : limit}
+        params = {"format" : "geocodejson", "q" : '',"limit" : limit}
         if lang:
             params["accept-language"] = lang
         if center:
-            skip("API has no lat/lon search paramters")
+            skip(msg="API has no lat/lon search paramters")
         return params
 
     @staticmethod
     def nominatim(**params):
         r = http.get(CONFIG['API_URL'] + '/search', params=params,
+                     headers={'user-agent': 'geocode-tester/0.0.1'})
+        if not r.status_code == 200:
+            raise HttpSearchException(error="Non 200 response")
+        return r.json()
+
+class Reverse:
+
+    @staticmethod
+    def default_params(limit, lang, center, detail):
+        params = {"q": '', "limit": limit}
+        if lang:
+            params['lang'] = lang
+        if center:
+            params['lat'] = center[0]
+            params['lon'] = center[1]
+        return params
+
+    @staticmethod
+    def default(**params):
+        r = http.get(CONFIG['API_URL'], params=params)
+        if not r.status_code == 200:
+            raise HttpSearchException(error="Non 200 response")
+        return r.json()
+
+    @staticmethod
+    def nominatim_params(limit, lang, center, detail):
+        zoom = { 'country' : '3', 'state' : '5', 'county' : '8',
+                 'city' : '10', 'district' : '14', 'street' : '17',
+                 'house' : '18'}
+        params = {"format" : "geocodejson", "limit" : limit,
+                  "lat" : center[0], "lon" : center[1],
+                  "zoom" : zoom[detail if detail is not None else 'house']}
+        if lang:
+            params["accept-language"] = lang
+        return params
+
+    @staticmethod
+    def nominatim(**params):
+        r = http.get(CONFIG['API_URL'] + '/reverse', params=params,
                      headers={'user-agent': 'geocode-tester/0.0.1'})
         if not r.status_code == 200:
             raise HttpSearchException(error="Non 200 response")
@@ -170,7 +209,19 @@ def assert_search(query, expected, limit=1,
         raise RuntimeError("Unknown API type {}".format(CONFIG['API_TYPE']))
     params = param_func(query, limit, lang, center)
     results = search_func(**params)
+    return check_result(results, params, expected, comment)
 
+def assert_reverse(query, expected, limit=1,
+                  comment=None, lang=None, center=None, detail=None):
+    param_func = getattr(Reverse, CONFIG['API_TYPE'] + '_params', None)
+    reverse_func = getattr(Reverse, CONFIG['API_TYPE'], None)
+    if param_func is None or reverse_func is None:
+        raise RuntimeError("Unknown API type {}".format(CONFIG['API_TYPE']))
+    params = param_func(limit, lang, center, detail)
+    results = reverse_func(**params)
+    return check_result(results, params, expected, comment)
+
+def check_result(results, params, expected, comment):
     def assert_expected(expected):
         found = False
         for r in results['features']:
