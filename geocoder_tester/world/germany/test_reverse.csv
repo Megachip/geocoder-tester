@@ -9,3 +9,5 @@ lat;lon;detail;expected_name;expected_district;expected_city;expected_county;exp
 52.023574;13.868923;street;Toter Mann;;Schlepzig;Dahme-Spreewald;Brandenburg;Deutschland;#764
 52.12347175;13.868923;street;Kirch-Steig;Lubolz;Storkow (Mark);Oder-Spree;Brandenburg;Deutschland;#764
 50.10895;8.66876;street;Weserstraße;Bahnhofsviertel;Frankfurt am Main;;Hessen;Deutschland;#766
+52.408284;12.970734;street;Akazienweg;Potsdam Nord;Potsdam;;Brandenburg;Deutschland;#1643
+53.46268;7.55213;street;Am Sandkrug;Sandkrug;Aurich;Landkreis Aurich;Niedersachsen;Deutschland;admin_level 10 in country side
