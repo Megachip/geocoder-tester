@@ -183,7 +183,7 @@ class BaseFlatItem(pytest.Item):
         elif 'center'in kwargs:
             assert_reverse(**kwargs)
         else:
-            raise RuntimError("Missing parrameter 'query' or 'lat/lon'.")
+            raise RuntimError("Missing parameter 'query' or 'lat/lon'.")
 
     def repr_failure(self, excinfo):
         """ called when self.runtest() raises an exception. """
