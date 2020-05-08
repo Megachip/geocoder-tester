@@ -142,6 +142,17 @@ def search_params_nominatim(query, limit, lang, center):
 
     return CONFIG['API_URL'] + '/search', params
 
+def search_params_photon(query, limit, lang, center):
+    params = {"q": query, "limit": limit}
+    if lang:
+        params['lang'] = lang
+    if center:
+        params['lat'] = center[0]
+        params['lon'] = center[1]
+
+    return CONFIG['API_URL'] + '/api', params
+
+
 def reverse_params_default(limit, lang, center, detail):
     params = {"q": '', "limit": limit}
     if lang:
@@ -164,6 +175,18 @@ def reverse_params_nominatim(limit, lang, center, detail):
 
     return CONFIG['API_URL'] + '/reverse', params
 
+def reverse_params_photon(limit, lang, center, detail):
+    params = {"lat" : center[0], "lon" : center[1]}
+    if lang:
+        params['lang'] = lang
+    if detail == 'street':
+        params['query_string_filter'] = 'osm_key:highway'
+
+    return CONFIG['API_URL'] + '/reverse', params
+
+def known_fields_photon():
+   return {'osm_id', 'osm_type', 'osm_key', 'osm_value',
+           'country', 'city', 'street', 'postcode', 'name', 'state'}
 
 def normalize(s):
     return normalize_pattern.sub(' ', unidecode(s.lower()))
@@ -205,6 +228,13 @@ def assert_reverse(query, expected, limit=1,
     return check_result(r.json(), params, expected, comment)
 
 def check_result(results, params, expected, comment):
+    known_fields = globals().get('known_fields_' + CONFIG['API_TYPE'], None)
+    if known_fields:
+        new_expected = {}
+        for k in known_fields():
+            if k in expected:
+                new_expected[k] = expected[k]
+        expected = new_expected
     def assert_expected(expected):
         found = False
         for r in results['features']:
