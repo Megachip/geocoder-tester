@@ -230,11 +230,7 @@ def assert_reverse(query, expected, limit=1,
 def check_result(results, params, expected, comment):
     known_fields = globals().get('known_fields_' + CONFIG['API_TYPE'], None)
     if known_fields:
-        new_expected = {}
-        for k in known_fields():
-            if k in expected:
-                new_expected[k] = expected[k]
-        expected = new_expected
+        expected = { k : v for k,v in expected.items() if k in known_fields() }
     def assert_expected(expected):
         found = False
         for r in results['features']:
