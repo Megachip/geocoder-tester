@@ -247,7 +247,7 @@ def check_result(results, params, expected, comment):
             failed = properties['failed'] = []
             for key, value in expected.items():
                 value = str(value)
-                if not compare_values(str(properties.get(key)), value):
+                if not compare_values(str(properties.get(key, '-')), value):
                     # Value is not like expected. But in the case of
                     # coordinate we need to handle the tolerance.
                     if key == 'coordinate':
