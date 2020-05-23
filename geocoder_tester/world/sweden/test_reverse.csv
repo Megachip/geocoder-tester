@@ -1,0 +1,3 @@
+lat;lon;detail;expected_name;expected_district;expected_city;expected_county;expected_state;expected_country;comment
+59.28350946977;15.149753278286;street;Postmästaregatan;Björkhaga;Örebro;Örebro län;-;Sverige;
+59.33874871319;15.231921352469;street;Kornvägen;-;Hovsta;Örebro län;-;Sverige;

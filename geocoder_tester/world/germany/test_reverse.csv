@@ -1,13 +1,13 @@
-lat;lon;detail;expected_name;expected_district;expected_city;expected_county;expected_state;expected_country;comment
-52.52051992;13.429229346;street;Lichtenberger Straße;Friedrichshain;Berlin;;;Deutschland;
-53.5506765;10.0030363;street;Bugenhagenstraße;Altstadt;Hamburg;;;Deutschland;
-53.528064;10.133514;street;A 1;Billstedt;Hamburg;;;Deutschland;#1643
-51.8541487;12.1764605;street;Seeweg;Großkühnau;Dessau-Roßlau;;Sachsen-Anhalt;Deutschland;#1643
-51.8400847;12.2479632;street;Oranienstraße;;Dessau-Roßlau;;Sachsen-Anhalt;Deutschland;#1643
-50.1194717;8.6397212;street;Kasseler Straße;Bockenheim;Frankfurt am Main;;Hessen;Deutschland;#1643
-51.934952;12.819672;street;Zahna;;Zahna-Elster;Wittenberg;Sachsen-Anhalt;Deutschland;#1643
-52.023574;13.868923;street;Toter Mann;;Schlepzig;Dahme-Spreewald;Brandenburg;Deutschland;#764
-52.12347175;13.868923;street;Kirch-Steig;Lubolz;Storkow (Mark);Oder-Spree;Brandenburg;Deutschland;#764
-50.10895;8.66876;street;Weserstraße;Bahnhofsviertel;Frankfurt am Main;;Hessen;Deutschland;#766
-52.408284;12.970734;street;Akazienweg;Potsdam Nord;Potsdam;;Brandenburg;Deutschland;#1643
-53.46268;7.55213;street;Am Sandkrug;Sandkrug;Aurich;Landkreis Aurich;Niedersachsen;Deutschland;admin_level 10 in country side
+lat;lon;detail;lang;expected_name;expected_district;expected_city;expected_county;expected_state;expected_country;comment
+52.52051992;13.429229346;street;de;Lichtenberger Straße;Friedrichshain;Berlin;;;Deutschland;
+53.5506765;10.0030363;street;de;Bugenhagenstraße;Altstadt;Hamburg;;;Deutschland;
+53.528064;10.133514;street;de;A 1;Billstedt;Hamburg;;;Deutschland;#1643
+51.8541487;12.1764605;street;de;Seeweg;Großkühnau;Dessau-Roßlau;;Sachsen-Anhalt;Deutschland;#1643
+51.8400847;12.2479632;street;de;Oranienstraße;;Dessau-Roßlau;;Sachsen-Anhalt;Deutschland;#1643
+50.1194717;8.6397212;street;de;Kasseler Straße;Bockenheim;Frankfurt am Main;;Hessen;Deutschland;#1643
+51.934952;12.819672;street;de;Zahna;;Zahna-Elster;Wittenberg;Sachsen-Anhalt;Deutschland;#1643
+52.023574;13.868923;street;de;Toter Mann;;Schlepzig;Dahme-Spreewald;Brandenburg;Deutschland;#764
+52.12347175;13.868923;street;de;Kirch-Steig;Lubolz;Storkow (Mark);Oder-Spree;Brandenburg;Deutschland;#764
+50.10895;8.66876;street;de;Weserstraße;Bahnhofsviertel;Frankfurt am Main;;Hessen;Deutschland;#766
+52.408284;12.970734;street;de;Akazienweg;Potsdam Nord;Potsdam;;Brandenburg;Deutschland;#1643
+53.46268;7.55213;street;de;Am Sandkrug;Sandkrug;Aurich;Landkreis Aurich;Niedersachsen;Deutschland;admin_level 10 in country side
